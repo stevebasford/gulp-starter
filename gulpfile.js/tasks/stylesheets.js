@@ -4,12 +4,13 @@ var gulp         = require('gulp')
 var gulpif       = require('gulp-if')
 var browserSync  = require('browser-sync')
 var sass         = require('gulp-sass')
+var postcss      = require('gulp-postcss')
 var sourcemaps   = require('gulp-sourcemaps')
 var handleErrors = require('../lib/handleErrors')
 var autoprefixer = require('gulp-autoprefixer')
 var path         = require('path')
 var cssnano      = require('gulp-cssnano')
-
+var lost         = require('lost')
 var stylesheetsTask = function () {
 
   var paths = {
@@ -30,6 +31,7 @@ var stylesheetsTask = function () {
     .pipe(gulpif(!global.production, sourcemaps.init()))
     .pipe(sass(TASK_CONFIG.stylesheets.sass))
     .on('error', handleErrors)
+    .pipe(postcss(TASK_CONFIG.stylesheets.postcss))
     .pipe(autoprefixer(TASK_CONFIG.stylesheets.autoprefixer))
     .pipe(gulpif(global.production, cssnano(cssnanoConfig)))
     .pipe(gulpif(!global.production, sourcemaps.write()))
